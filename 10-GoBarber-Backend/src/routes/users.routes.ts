@@ -1,7 +1,15 @@
 import { Router } from 'express';
 import CreateUserService from '../services/CreateUserService';
+import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
-const usersRoutere = Router();
+import multer from 'multer';
+
+import uploadConfig from '../config/upload';
+
+const usersRouter = Router();
+
+const upload = multer(uploadConfig);
 
 /**
  * Repositories
@@ -10,7 +18,7 @@ const usersRoutere = Router();
  */
 
 // route gets '/appointments' from index.ts
-usersRoutere.post('/', async (request, response) => {
+usersRouter.post('/', async (request, response) => {
     try {
         const { name, email, password } = request.body;
 
@@ -31,4 +39,21 @@ usersRoutere.post('/', async (request, response) => {
     }
 });
 
-export default usersRoutere;
+// patch for a updating few informations
+
+usersRouter.patch(
+    '/avatar',
+    ensureAuthenticated,
+    upload.single('avatar'),
+    async (request, response) => {
+        // logs file's metadata
+        const updateUserAvatar = new UpdateUserAvatarService();
+        const user = await updateUserAvatar.execute({
+            user_id: request.user.id,
+            avatarFilename: request.file.filename,
+        });
+
+        return response.json(user);
+    },
+);
+export default usersRouter;
