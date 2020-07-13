@@ -7,7 +7,7 @@ import cors from 'cors';
 
 import 'express-async-errors';
 
-// src/server.ts
+// src/server.tsyarn
 import routes from './routes';
 
 import uploadConfig from './config/upload';
