@@ -2,6 +2,9 @@
 import 'reflect-metadata';
 
 import express, { Request, Response, NextFunction } from 'express';
+
+import cors from 'cors';
+
 import 'express-async-errors';
 
 // src/server.ts
@@ -15,6 +18,9 @@ import AppError from './errors/AppError';
 import './database';
 
 const app = express();
+
+// cors - just for browser requests - neither insomnia or react
+app.use(cors());
 
 // static files
 app.use('/files', express.static(uploadConfig.directory));
