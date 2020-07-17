@@ -1,4 +1,4 @@
 import { createConnection } from 'typeorm';
 
-// rads for orm.config
+// reads for orm.config
 createConnection();
