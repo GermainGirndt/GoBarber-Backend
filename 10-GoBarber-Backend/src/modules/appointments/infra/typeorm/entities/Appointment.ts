@@ -9,7 +9,7 @@ import {
     JoinColumn,
 } from 'typeorm';
 
-import User from './User';
+import User from '@modules/users/infra/typeorm/entities/User';
 // Class with typescript type - interface
 // Actually, it was built to be related to the db
 // enabling decorations in typescript config file and using it to relate it to the db

@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import CreateUserService from '../services/CreateUserService';
-import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
+import CreateUserService from '@modules/users/services/CreateUserService';
+import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 import multer from 'multer';
 
-import uploadConfig from '../config/upload';
+import uploadConfig from '@config/upload';
 
 const usersRouter = Router();
 
@@ -20,6 +20,8 @@ const upload = multer(uploadConfig);
 // route gets '/appointments' from index.ts
 usersRouter.post('/', async (request, response) => {
     try {
+        console.log('request incoming');
+        console.log(request.body);
         const { name, email, password } = request.body;
 
         const createUser = new CreateUserService();
