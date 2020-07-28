@@ -1,11 +1,10 @@
-import Appointment from '../infra/typeorm/entities/Appointment';
-import AppointmentsRepository from '../repositories/AppointmentsRepository';
-
-import { getCustomRepository } from 'typeorm';
-
 import { startOfHour } from 'date-fns';
 
 import AppError from '@shared/errors/AppError';
+
+import Appointment from '../infra/typeorm/entities/Appointment';
+
+import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 /**
  *
@@ -14,7 +13,7 @@ import AppError from '@shared/errors/AppError';
  * [x] Repository access
  */
 
-interface Request {
+interface IRequest {
     provider_id: string;
     date: Date;
 }
@@ -30,23 +29,22 @@ interface Request {
  */
 
 class CreateAppointmentService {
-    // private appointmentsRepository: AppointmentsRepository;
+    // private in the construction creates the variable
 
-    // constructor(appointmentsRepository: AppointmentsRepository) {
-    //     this.appointmentsRepository = appointmentsRepository;
-    // }
+    constructor(private appointmentsRepository: IAppointmentsRepository) {
+        this.appointmentsRepository = appointmentsRepository;
+    }
 
-    public async execute({ date, provider_id }: Request): Promise<Appointment> {
-        const appointmentsRepository = getCustomRepository(
-            AppointmentsRepository,
-        );
-
+    public async execute({
+        date,
+        provider_id,
+    }: IRequest): Promise<Appointment> {
         // startOfHour brings the Data object back to the hour beguin
         const appointmentDate = startOfHour(date);
         console.log('here');
         console.log(date);
 
-        const findAppointmentInSameDate = await appointmentsRepository.findByDate(
+        const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
             appointmentDate,
         );
 
@@ -56,12 +54,10 @@ class CreateAppointmentService {
             throw new AppError('This appointment is already booked');
         }
 
-        const appointment = appointmentsRepository.create({
+        const appointment = await this.appointmentsRepository.create({
             provider_id,
             date: appointmentDate,
         });
-
-        await appointmentsRepository.save(appointment);
 
         return appointment;
     }
