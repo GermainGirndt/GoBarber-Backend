@@ -2,6 +2,8 @@ import { getRepository } from 'typeorm';
 import User from '@modules/users/infra/typeorm/entities/User';
 import path from 'path';
 
+import IUsersRepository from '../repositories/IUsersRepository';
+
 // Node file system
 import fs from 'fs';
 
@@ -15,10 +17,12 @@ interface Request {
 }
 
 class UpdateUserAvatarService {
-    public async execute({ user_id, avatarFilename }: Request): Promise<User> {
-        const usersRepository = getRepository(User);
+    constructor(private usersRepository: IUsersRepository) {
+        this.usersRepository = usersRepository;
+    }
 
-        const user = await usersRepository.findOne(user_id);
+    public async execute({ user_id, avatarFilename }: Request): Promise<User> {
+        const user = await this.usersRepository.findById(user_id);
 
         if (!user) {
             throw new AppError(
@@ -45,7 +49,7 @@ class UpdateUserAvatarService {
 
         user.avatar = avatarFilename;
 
-        await usersRepository.save(user);
+        await this.usersRepository.save(user);
 
         delete user.password;
 

@@ -1,3 +1,5 @@
+// import postgrees connection
+import '@shared/infra/typeorm';
 // for typeorm
 import 'reflect-metadata';
 
@@ -13,9 +15,6 @@ import routes from './routes';
 import uploadConfig from '@config/upload';
 
 import AppError from '@shared/errors/AppError';
-
-// import postgrees connection
-import '@shared/infra/typeorm';
 
 const app = express();
 
