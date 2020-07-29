@@ -47,14 +47,10 @@ class CreateAppointmentService {
     }: IRequest): Promise<Appointment> {
         // startOfHour brings the Data object back to the hour beguin
         const appointmentDate = startOfHour(date);
-        console.log('here');
-        console.log(date);
 
         const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
             appointmentDate,
         );
-
-        console.log(findAppointmentInSameDate);
 
         if (findAppointmentInSameDate) {
             throw new AppError('This appointment is already booked');
