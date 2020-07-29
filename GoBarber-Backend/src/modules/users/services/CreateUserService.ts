@@ -5,14 +5,20 @@ import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 
+import { injectable, inject } from 'tsyringe';
+
 interface Request {
     name: string;
     email: string;
     password: string;
 }
 
+@injectable()
 class CreateUserService {
-    constructor(private usersRepository: IUsersRepository) {
+    constructor(
+        @inject('UsersRepository')
+        private usersRepository: IUsersRepository,
+    ) {
         this.usersRepository = usersRepository;
     }
 

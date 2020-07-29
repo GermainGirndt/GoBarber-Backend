@@ -1,5 +1,6 @@
 // import postgrees connection
 import '@shared/infra/typeorm';
+import '@shared/container';
 // for typeorm
 import 'reflect-metadata';
 

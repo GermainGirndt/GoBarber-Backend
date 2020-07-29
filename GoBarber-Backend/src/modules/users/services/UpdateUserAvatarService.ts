@@ -4,6 +4,8 @@ import path from 'path';
 
 import IUsersRepository from '../repositories/IUsersRepository';
 
+import { injectable, inject } from 'tsyringe';
+
 // Node file system
 import fs from 'fs';
 
@@ -16,8 +18,12 @@ interface Request {
     avatarFilename: string;
 }
 
+@injectable()
 class UpdateUserAvatarService {
-    constructor(private usersRepository: IUsersRepository) {
+    constructor(
+        @inject('UsersRepository')
+        private usersRepository: IUsersRepository,
+    ) {
         this.usersRepository = usersRepository;
     }
 
