@@ -1,7 +1,3 @@
-// import postgrees connection
-import '@shared/infra/typeorm';
-import '@shared/container';
-// for typeorm
 import 'reflect-metadata';
 
 import express, { Request, Response, NextFunction } from 'express';
@@ -11,6 +7,12 @@ import cors from 'cors';
 import 'express-async-errors';
 
 // src/server.tsyarn
+
+// for typeorm
+// import postgrees connection
+import '@shared/infra/typeorm';
+import '@shared/container';
+
 import routes from './routes';
 
 import uploadConfig from '@config/upload';

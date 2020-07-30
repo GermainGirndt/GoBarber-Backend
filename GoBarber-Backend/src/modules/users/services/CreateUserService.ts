@@ -1,5 +1,8 @@
-import { hash } from 'bcryptjs';
 import User from '@modules/users/infra/typeorm/entities/User';
+
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
+
+import BCryptHashProvider from '@modules/users/providers/HashProvider/implementations/BCryptHashProvider';
 
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
@@ -17,6 +20,9 @@ class CreateUserService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
+
+        @inject('HashProvider')
+        private hashProvider: IHashProvider,
     ) {
         this.usersRepository = usersRepository;
     }
@@ -35,7 +41,7 @@ class CreateUserService {
             throw new AppError('Email address already exists');
         }
 
-        const hashedPassword = await hash(password, 8);
+        const hashedPassword = await this.hashProvider.generateHash(password);
 
         const user = await this.usersRepository.create({
             name,

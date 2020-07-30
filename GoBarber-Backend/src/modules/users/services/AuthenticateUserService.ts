@@ -1,11 +1,11 @@
 import User from '@modules/users/infra/typeorm/entities/User';
-import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import authConfig from '@config/auth';
 
 import { injectable, inject } from 'tsyringe';
 
 import IUsersRepository from '../repositories/IUsersRepository';
+import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider';
 
 import AppError from '@shared/errors/AppError';
 
@@ -24,6 +24,9 @@ class AuthenticateUserService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
+
+        @inject('HashProvider')
+        private hashProvider: IHashProvider,
     ) {
         this.usersRepository = usersRepository;
     }
@@ -38,7 +41,10 @@ class AuthenticateUserService {
         // user.password - encrypted password
         // password - not encrypted password
 
-        const passwordMatched = await compare(password, user.password);
+        const passwordMatched = await this.hashProvider.compareHash(
+            password,
+            user.password,
+        );
 
         if (!passwordMatched) {
             throw new AppError('Incorrect email/password combination.', 401);
