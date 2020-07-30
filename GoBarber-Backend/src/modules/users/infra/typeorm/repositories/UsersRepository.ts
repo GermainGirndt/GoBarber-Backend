@@ -1,4 +1,4 @@
-import User from '../entities/User';
+import User from '@modules/users/infra/typeorm/entities/User';
 // import { isEqual } from 'date-fns';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
