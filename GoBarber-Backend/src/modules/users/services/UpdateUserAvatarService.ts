@@ -1,5 +1,4 @@
 import User from '@modules/users/infra/typeorm/entities/User';
-import path from 'path';
 
 import IUsersRepository from '../repositories/IUsersRepository';
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
@@ -7,9 +6,6 @@ import IStorageProvider from '@shared/container/providers/StorageProvider/models
 import { injectable, inject } from 'tsyringe';
 
 // Node file system
-import fs from 'fs';
-
-import uploadConfig from '@config/upload';
 
 import AppError from '@shared/errors/AppError';
 
@@ -43,20 +39,12 @@ class UpdateUserAvatarService {
         if (user.avatar) {
             // Delete previous avatar
 
-            const userAvatarFilePath = path.join(
-                uploadConfig.directory,
-                user.avatar,
-            );
-            const UserAvatarFileExists = await fs.promises.stat(
-                userAvatarFilePath,
-            );
-
-            if (UserAvatarFileExists) {
-                await fs.promises.unlink(userAvatarFilePath);
-            }
+            await this.storageProvider.deleteFile(user.avatar);
         }
 
-        user.avatar = avatarFilename;
+        const fileName = await this.storageProvider.saveFile(avatarFilename);
+
+        user.avatar = fileName;
 
         await this.usersRepository.save(user);
 
