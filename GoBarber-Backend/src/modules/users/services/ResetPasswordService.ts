@@ -1,8 +1,11 @@
 import User from '@modules/users/infra/typeorm/entities/User';
 
+import { differenceInHours } from 'date-fns';
+
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IUserTokenRepository from '@modules/users/repositories/IUserTokensRepository';
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 import { injectable, inject } from 'tsyringe';
 
@@ -21,10 +24,36 @@ class ResetPasswordService {
 
         @inject('UserTokenRepository')
         private userTokensRepository: IUserTokenRepository,
+
+        @inject('IHashProvider')
+        private hashProvider: IHashProvider,
     ) {}
 
     // public async execute({ email }: IRequest): Promise<void> {}
-    public async execute({ token, password }: IRequest): Promise<void> {}
+    public async execute({ token, password }: IRequest): Promise<void> {
+        const userToken = await this.userTokensRepository.findByToken(token);
+
+        if (!userToken) {
+            throw new AppError('User token does not exist.');
+        }
+        const user = await this.usersRepository.findById(userToken.user_id);
+
+        if (!user) {
+            throw new AppError('User does not exist.');
+        }
+
+        const tokenCreatedAt = userToken.created_at;
+
+        const now = new Date(Date.now());
+
+        if (differenceInHours(now, tokenCreatedAt) > 2) {
+            throw new AppError('Token expired');
+        }
+
+        user.password = await this.hashProvider.generateHash(password);
+
+        await this.usersRepository.save(user);
+    }
 }
 
 export default ResetPasswordService;
