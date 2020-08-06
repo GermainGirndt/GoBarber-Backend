@@ -12,19 +12,28 @@ class UserTokensRepository implements IUserTokensRepository {
     }
 
     public async generate(user_id: string): Promise<UserToken> {
+        console.log('user_id:');
+        console.log(user_id);
         const userToken = this.ormRepository.create({
             user_id,
         });
+        console.log('user token');
+        console.log(userToken);
 
         await this.ormRepository.save(userToken);
+
+        console.log('saved');
 
         return userToken;
     }
 
     public async findByToken(token: string): Promise<UserToken | undefined> {
+        console.log('Executing find by token');
         const userToken = await this.ormRepository.findOne({
             where: { token },
         });
+
+        console.log(`Returning ${userToken}`);
 
         return userToken;
     }

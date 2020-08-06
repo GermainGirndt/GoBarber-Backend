@@ -1,5 +1,3 @@
-import User from '@modules/users/infra/typeorm/entities/User';
-
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IUserTokenRepository from '@modules/users/repositories/IUserTokensRepository';
@@ -21,7 +19,7 @@ class SendEmailForPasswordRecoveryService {
         @inject('MailProvider')
         private mailProvider: IMailProvider,
 
-        @inject('UserTokenRepository')
+        @inject('UserTokensRepository')
         private userTokensRepository: IUserTokenRepository,
     ) {}
 
@@ -33,9 +31,14 @@ class SendEmailForPasswordRecoveryService {
             throw new AppError('User does not exist.');
         }
 
+        console.log(`User found:`);
+        console.log(user);
+
         await this.userTokensRepository.generate(user.id);
 
-        this.mailProvider.sendMail(
+        console.log('generated user id');
+
+        await this.mailProvider.sendMail(
             email,
             'Pedido de recuperação de senha recebido.',
         );

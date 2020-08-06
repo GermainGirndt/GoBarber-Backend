@@ -26,6 +26,7 @@ export default class EtherealMailProvider implements IMailProvider {
     }
 
     public async sendMail(to: string, body: string): Promise<void> {
+        console.log('Sending email');
         const message = await this.client.sendMail({
             from: 'Equipe GoBarber <equipe@gobarber.com.br>',
             to,
