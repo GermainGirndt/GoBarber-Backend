@@ -43,7 +43,7 @@ export default class EtherealMailProvider implements IMailProvider {
             to: { name: to.name, address: to.email },
             from: {
                 name: from?.name || 'Equipe GoBarber',
-                address: from?.email || 'equipe@gobarber.com.be',
+                address: from?.email || 'equipe@gobarber.com.br',
             },
             subject,
             html: await this.mailTemplateProvider.parse(templateData),

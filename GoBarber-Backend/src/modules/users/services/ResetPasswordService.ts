@@ -31,9 +31,6 @@ class ResetPasswordService {
 
     // public async execute({ email }: IRequest): Promise<void> {}
     public async execute({ token, password }: IRequest): Promise<void> {
-        console.log('request for reset password service ');
-
-        console.log(token, password);
         const userToken = await this.userTokensRepository.findByToken(token);
 
         if (!userToken) {
