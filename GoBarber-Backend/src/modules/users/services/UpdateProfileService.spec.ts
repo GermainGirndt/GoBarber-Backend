@@ -3,6 +3,7 @@ import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepo
 import UpdateProfileService from './UpdateProfileService';
 
 import AppError from '@shared/errors/AppError';
+import { uuid } from 'uuidv4';
 
 let fakeHashProvider: FakeHashProvider;
 let fakeUsersRepository: FakeUsersRepository;
@@ -35,6 +36,17 @@ describe('Update Profile', () => {
 
         expect(updatedUser.name).toBe('John Trê');
         expect(updatedUser.email).toBe('johntre@example.com');
+    });
+
+    it('should not be able to update the profile of a non-existing user', async () => {
+        await expect(
+            updateProfileService.execute({
+                userId: uuid(),
+                name: 'John Trê',
+                email: 'johntre@example.com',
+                oldPassword: '123456',
+            }),
+        ).rejects.toBeInstanceOf(AppError);
     });
 
     it('should be able to reuse a previous email', async () => {

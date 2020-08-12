@@ -1,7 +1,6 @@
 import User from '@modules/users/infra/typeorm/entities/User';
 
 import IUsersRepository from '../repositories/IUsersRepository';
-// import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider';
 
 import { injectable, inject } from 'tsyringe';
