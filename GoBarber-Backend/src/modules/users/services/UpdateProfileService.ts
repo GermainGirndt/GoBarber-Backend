@@ -21,7 +21,7 @@ class UpdateProfileService {
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
 
-        @inject('IHashProvider')
+        @inject('HashProvider')
         private hashProvider: IHashProvider,
     ) {
         this.usersRepository = usersRepository;
