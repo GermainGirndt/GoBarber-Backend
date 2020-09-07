@@ -5,10 +5,6 @@ import IFindAllProvidersDTO from '@modules/users/dtos/IFindAllProvidersDTO';
 
 import { injectable, inject } from 'tsyringe';
 
-interface Request {
-    userId: string;
-}
-
 @injectable()
 class ListProvidersService {
     constructor(

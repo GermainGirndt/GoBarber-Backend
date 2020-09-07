@@ -1,12 +1,14 @@
 // import { isEqual } from 'date-fns';
 
-import { isEqual } from 'date-fns';
+import { isEqual, getMonth, getYear } from 'date-fns';
 
 import { uuid } from 'uuidv4';
 
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
+
+import IFindAllInMonthFromProviderDTO from '@modules/appointments/dtos/IFindAllInMonthFromProviderDTO';
 
 import Appointment from '../../infra/typeorm/entities/Appointment';
 // typeorm 'Repository' has already some built in methods like:
@@ -21,6 +23,21 @@ class AppointmentsRepository implements IAppointmentsRepository {
         );
 
         return findAppointment;
+    }
+
+    public async findAllInMonthFromProvider({
+        provider_id,
+        month,
+        year,
+    }: IFindAllInMonthFromProviderDTO): Promise<Appointment[]> {
+        const appointments = this.appointments.filter(
+            appointment =>
+                appointment.provider_id === provider_id &&
+                getMonth(appointment.date) + 1 === month &&
+                getYear(appointment.date) === year,
+        );
+
+        return appointments;
     }
 
     public async create({
