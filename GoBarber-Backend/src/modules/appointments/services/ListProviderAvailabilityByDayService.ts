@@ -1,14 +1,8 @@
-// import User from '@modules/users/infra/typeorm/entities/User';
-
-// import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-// import IFindAllProvidersDTO from '@modules/users/dtos/IFindAllProvidersDTO';
-
 import { injectable, inject } from 'tsyringe';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
-import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 
-import { getHours } from 'date-fns';
+import { getHours, isAfter } from 'date-fns';
 
 interface IRequest {
     userId: string;
@@ -46,14 +40,25 @@ class ListProviderAvailabilityByDayService {
             (_, index) => index + hourStart,
         );
 
+        const currentDate = new Date(Date.now());
+
         const availability = eachHourArray.map(hour => {
             const hasAppointmentInHour = appointments.find(
                 appointment => getHours(appointment.date) === hour,
             );
 
+            const intendedAppointmentDate = new Date(
+                year,
+                month - 1,
+                day,
+                hour,
+            );
+
             return {
                 hour,
-                available: !hasAppointmentInHour,
+                available:
+                    !hasAppointmentInHour &&
+                    isAfter(intendedAppointmentDate, currentDate),
             };
         });
 
