@@ -5,7 +5,7 @@ import IAppointmentsRepository from '@modules/appointments/repositories/IAppoint
 import { getHours, isAfter } from 'date-fns';
 
 interface IRequest {
-    userId: string;
+    providerId: string;
     day: number;
     month: number;
     year: number;
@@ -24,13 +24,13 @@ class ListProviderAvailabilityByDayService {
     ) {}
 
     public async execute({
-        userId,
+        providerId,
         day,
         month,
         year,
     }: IRequest): Promise<IResponse> {
         const appointments = await this.appointmentsRepository.findAllInDayFromProvider(
-            { provider_id: userId, day, month, year },
+            { provider_id: providerId, day, month, year },
         );
 
         const hourStart = 8;

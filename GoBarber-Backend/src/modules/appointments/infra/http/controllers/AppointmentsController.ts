@@ -13,6 +13,9 @@ export default class AppointmentController {
         console.log(`Incoming request:`);
         console.log(request.method);
         console.log(request.body);
+
+        const user_id = request.user.id;
+
         const { provider_id, date } = request.body;
 
         // parseISO converts String to Date (JS)
@@ -23,6 +26,7 @@ export default class AppointmentController {
 
         const appointment = await createAppointment.execute({
             date: parsedDate,
+            user_id,
             provider_id,
         });
 
