@@ -50,6 +50,10 @@ class CreateAppointmentService {
         // startOfHour brings the Data object back to the hour beguin
         const appointmentDate = startOfHour(date);
 
+        if (user_id === provider_id) {
+            throw new AppError("You can't create an appointment with yourself");
+        }
+
         if (isBefore(appointmentDate, Date.now())) {
             throw new AppError(
                 "You can't create an appointment on a past date",
