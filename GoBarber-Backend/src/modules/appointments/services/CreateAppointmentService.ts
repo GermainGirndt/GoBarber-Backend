@@ -1,4 +1,4 @@
-import { startOfHour, isBefore } from 'date-fns';
+import { startOfHour, isBefore, getHours } from 'date-fns';
 
 import { injectable, inject } from 'tsyringe';
 
@@ -57,6 +57,12 @@ class CreateAppointmentService {
         if (isBefore(appointmentDate, Date.now())) {
             throw new AppError(
                 "You can't create an appointment on a past date",
+            );
+        }
+
+        if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 17) {
+            throw new AppError(
+                'You can only create appointments between 8am and 17pm',
             );
         }
 
