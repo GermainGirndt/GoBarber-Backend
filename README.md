@@ -5,7 +5,7 @@ A **complete Node.js/Express API** for booking your appointment! :ballot_box_wit
 * :robot: Typescript for better code control
 * :bank: PostgreSQL Databank
 * :pencil2: TypeORM for writting queries
-* :heart_eyes: DDD Based Architecture
+* :heart_eyes: DDD-Based Architecture
 * :sparkler:User session and authentication via JSON Web Token 
 
 ## :hourglass_flowing_sand: Future Improvements
