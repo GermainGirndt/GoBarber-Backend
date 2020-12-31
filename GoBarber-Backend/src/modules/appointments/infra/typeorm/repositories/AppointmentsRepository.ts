@@ -12,7 +12,7 @@ import { getRepository, Repository, Raw } from 'typeorm';
 // typeorm 'Repository' has already some built in methods like:
 // contructor, "all", "list" and "create"
 
-class AppointmentsRespository implements IAppointmentsRepository {
+class AppointmentsRepository implements IAppointmentsRepository {
     private ormRepository: Repository<Appointment>;
 
     constructor() {
@@ -29,18 +29,6 @@ class AppointmentsRespository implements IAppointmentsRepository {
         // '||' behaves like an 'else'
         return findAppointment;
     }
-
-    // defined typescript type with ': Appointment'
-    // public create(provider: string, date: Date): Appointment {
-    //     const appointment = new Appointment(provider, date);
-
-    //     this.appointments.push(appointment);
-
-    //     console.log('New appointment saved');
-    //     console.log(this.appointments);
-
-    //     return appointment;
-    // }
 
     public async findAllInMonthFromProvider({
         provider_id,
@@ -69,6 +57,7 @@ class AppointmentsRespository implements IAppointmentsRepository {
         month,
         year,
     }: IFindAllInDayFromProviderDTO): Promise<Appointment[]> {
+        console.log('this was called');
         // if month === 5 => 05
         const parsedDay = String(day).padStart(2, '0');
         const parsedMonth = String(month).padStart(2, '0');
@@ -103,4 +92,4 @@ class AppointmentsRespository implements IAppointmentsRepository {
     }
 }
 
-export default AppointmentsRespository;
+export default AppointmentsRepository;

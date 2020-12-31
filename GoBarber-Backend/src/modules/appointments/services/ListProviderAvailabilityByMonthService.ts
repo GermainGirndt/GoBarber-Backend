@@ -1,8 +1,3 @@
-// import User from '@modules/users/infra/typeorm/entities/User';
-
-// import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-// import IFindAllProvidersDTO from '@modules/users/dtos/IFindAllProvidersDTO';
-
 import { injectable, inject } from 'tsyringe';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
